@@ -2,7 +2,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Software Renderer");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Software Renderer");
 
     sf::VertexArray triangle(sf::Triangles, 3);
     triangle[0].position = sf::Vector2f(400, 100);

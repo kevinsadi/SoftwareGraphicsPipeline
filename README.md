@@ -15,7 +15,7 @@ cmake --build build
 
 Run the executable 
 
-` .\bin\Debug\main.exe`
+` .\build\bin\Debug\main.exe`
 
 
 OR 
