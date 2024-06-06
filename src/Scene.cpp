@@ -13,6 +13,10 @@ Scene::Scene() :
     m_far(100.0f),
     m_matColor(1.0f, 0.0f, 0.0f)
 {
+    m_modelXRotation = radians(m_modelXRotation);
+    m_modelYRotation = radians(m_modelYRotation);
+    m_modelZRotation = radians(m_modelZRotation);
+    m_fov = radians(m_fov);
 }
 
 void Scene::loadScene(std::string& filePath) 
@@ -117,8 +121,21 @@ void Scene::applyViewTransform()
     std::cout << "Applied View Transform" << std::endl;
 }
 
-void Scene::applyPerspectiveTransform()
+void Scene::applyPerspectiveTransform(float width, float height)
 {
+    float aspectRatio = width / height;
+
+    Eigen::Matrix4f perspMat;
+    perspMat << (1 / aspectRatio) * (cotangent(1 / m_fov)), 0, 0, 0,
+                0, cotangent(1 / m_fov), 0, 0,
+                0, 0,  m_far / (m_far - m_near), 1,
+                0, 0, -(m_far * m_near) / (m_far - m_near), 0;
+
+    for (Triangle& tri: m_triangles)
+    {
+        tri.transformVertsByMat4(perspMat);
+    }
+    std::cout << "Applied Perspective Transform" << std::endl;
     
 }
 
@@ -135,4 +152,15 @@ void Scene::renderScene(sf::RenderWindow& window) const
     triangle[2].position = sf::Vector2f(600, 500);
 
     window.draw(triangle);
+}
+
+float Scene::radians(float degrees)
+{
+    return degrees * (M_PI / 180); 
+}
+
+
+float Scene::cotangent(float radians) 
+{
+    return 1.0 / std::tan(radians);
 }

@@ -15,7 +15,7 @@ int main()
     scene.applyWorldTransform();
     scene.calculateLighting();
     scene.applyViewTransform();
-    scene.applyPerspectiveTransform();
+    scene.applyPerspectiveTransform(window.getSize().x, window.getSize().y);
 
     while (window.isOpen())
     {
