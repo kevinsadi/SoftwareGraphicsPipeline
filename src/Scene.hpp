@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <filesystem>
+#include <SFML/Graphics.hpp>
 
 #include "Triangle.hpp"
 
@@ -36,5 +37,9 @@ public:
     void applyWorldTransform();
     void applyViewTransform();
     void applyPerspectiveTransform();
+
+    void calculateLighting();
+
+    void renderScene(sf::RenderWindow& window) const;
 
 };

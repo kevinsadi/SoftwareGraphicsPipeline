@@ -1,5 +1,3 @@
-#include <SFML/Graphics.hpp>
-
 #include "Scene.hpp"
 
 int main()
@@ -14,6 +12,10 @@ int main()
     // Create the scene
     Scene scene;
     scene.loadScene(std::string("Models/Mew_lp.raw"));
+    scene.applyWorldTransform();
+    scene.calculateLighting();
+    scene.applyViewTransform();
+    scene.applyPerspectiveTransform();
 
     while (window.isOpen())
     {
@@ -27,6 +29,7 @@ int main()
 
             window.clear();
             window.draw(triangle);
+            // scene.renderScene();
             window.display();
         }
     }

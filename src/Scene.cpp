@@ -50,7 +50,7 @@ void Scene::loadScene(std::string& filePath)
                      >> v2x >> v2y >> v2z
                      >> v3x >> v3y >> v3z;
         
-        Triangle triangle(Eigen::Vector3f(v1x, v1y, v1z), Eigen::Vector3f(v2x, v2y, v2z), Eigen::Vector3f(v3x, v3y, v3z));
+        Triangle triangle(Eigen::RowVector4f(v1x, v1y, v1z, 1), Eigen::RowVector4f(v2x, v2y, v2z, 1), Eigen::RowVector4f(v3x, v3y, v3z, 1));
         m_triangles.push_back(triangle);
     }
 
@@ -60,28 +60,38 @@ void Scene::loadScene(std::string& filePath)
 void Scene::applyWorldTransform()
 {
     // LHS, row-coordinate convention 
-    Eigen::Matrix4f transformMat(1, 0, 0, 0,
-                                 0, 1, 0, 0,
-                                 0, 0, 1, 0,
-                                 m_modelPosition.x(), m_modelPosition.y(), m_modelPosition.z(), 1);
+    Eigen::Matrix4f translateMat;
+    translateMat << 1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    m_modelPosition.x(), m_modelPosition.y(), m_modelPosition.z(), 1;
 
-    Eigen::Matrix4f rotateXMat(1, 0, 0, 0,
-                               0, cos(m_modelXRotation), sin(m_modelXRotation), 0,
-                               0, -sin(m_modelXRotation), cos(m_modelXRotation), 0,
-                               0, 0, 0, 1);
+    Eigen::Matrix4f rotateXMat;
+    rotateXMat <<   1, 0, 0, 0,
+                    0, cos(m_modelXRotation), sin(m_modelXRotation), 0,
+                    0, -sin(m_modelXRotation), cos(m_modelXRotation), 0,
+                    0, 0, 0, 1;
 
-    Eigen::Matrix4f rotateYMat(cos(m_modelYRotation), 0, -sin(m_modelYRotation), 0,
-                                0, 1, 0, 0,
-                                sin(m_modelYRotation), 0, cos(m_modelYRotation), 0,
-                                0, 0, 0, 1);
+    Eigen::Matrix4f rotateYMat;
+    rotateYMat << cos(m_modelYRotation), 0, -sin(m_modelYRotation), 0,
+                    0, 1, 0, 0,
+                    sin(m_modelYRotation), 0, cos(m_modelYRotation), 0,
+                    0, 0, 0, 1;
 
-    Eigen::Matrix4f rotateZMat(cos(m_modelZRotation), sin(m_modelZRotation), 0, 0,
-                                -sin(m_modelZRotation), cos(m_modelZRotation), 0, 0,
-                                0, 0, 1, 0,
-                                0, 0, 0, 1);
+    Eigen::Matrix4f rotateZMat;
+    rotateZMat << cos(m_modelZRotation), sin(m_modelZRotation), 0, 0,
+                    -sin(m_modelZRotation), cos(m_modelZRotation), 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1;
 
     for (Triangle& tri: m_triangles)
     {
+        tri.transformVertsByMat4(rotateXMat);
+        tri.transformVertsByMat4(rotateYMat);
+        tri.transformVertsByMat4(rotateZMat);
+        tri.transformVertsByMat4(translateMat);
+        // COMPUTE NORMAL AFTER WORLD SPACE TRANSFORM, FOR LIGHTING
+        tri.computeNormal();
     }
 }
 
@@ -93,4 +103,19 @@ void Scene::applyViewTransform()
 void Scene::applyPerspectiveTransform()
 {
     
+}
+
+void Scene::calculateLighting()
+{
+    std::cout << "KEVIN COME BACK AND DO LIGHTING" << std::endl;
+}
+
+void Scene::renderScene(sf::RenderWindow& window) const
+{
+    sf::VertexArray triangle(sf::Triangles, 3);
+    triangle[0].position = sf::Vector2f(400, 100);
+    triangle[1].position = sf::Vector2f(200, 500);
+    triangle[2].position = sf::Vector2f(600, 500);
+
+    window.draw(triangle);
 }
