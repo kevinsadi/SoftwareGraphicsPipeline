@@ -93,11 +93,28 @@ void Scene::applyWorldTransform()
         // COMPUTE NORMAL AFTER WORLD SPACE TRANSFORM, FOR LIGHTING
         tri.computeNormal();
     }
+    std::cout << "Applied World Transform" << std::endl;
 }
 
 void Scene::applyViewTransform()
 {
-   
+    Eigen::Vector3f up(0.0, 1.0, 0.0);
+
+    Eigen::Vector3f zAxis = (m_cameraPosition - m_cameraDirection).normalized();
+    Eigen::Vector3f xAxis = up.cross(zAxis);
+    Eigen::Vector3f yAxis = zAxis.cross(xAxis);
+
+    Eigen::Matrix4f viewMat;
+    viewMat <<  xAxis.x(), yAxis.x(), zAxis.x(), 0,
+                xAxis.y(), yAxis.y(), zAxis.y(), 0, 
+                xAxis.z(), yAxis.z(), zAxis.z(), 0, 
+                -xAxis.dot(m_cameraPosition), -yAxis.dot(m_cameraPosition), -zAxis.dot(m_cameraPosition), 1; 
+
+    for (Triangle& tri: m_triangles)
+    {
+        tri.transformVertsByMat4(viewMat);
+    }
+    std::cout << "Applied View Transform" << std::endl;
 }
 
 void Scene::applyPerspectiveTransform()
