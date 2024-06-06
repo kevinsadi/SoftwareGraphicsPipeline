@@ -1,6 +1,11 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <fstream>
+#include <vector>
+#include <iostream>
+
+#include "Triangle.hpp"
 
 class Scene 
 {
@@ -12,6 +17,12 @@ private:
     float m_modelXRotation;
     float m_modelYRotation;
     float m_modelZRotation;
+    float m_fov;
+    float m_near;
+    float m_far;
+    Eigen::Vector3f m_matColor;
+    
+    std::vector<Triangle> triangles;
 
 public:
     Scene();
@@ -19,6 +30,6 @@ public:
     /**
      * Given a filePath to a raw model format, load it into the scene as a std::vector of `Triangle`s
     */
-    void LoadScene(std::string filePath);
+    void loadScene(std::string filePath);
 
 };

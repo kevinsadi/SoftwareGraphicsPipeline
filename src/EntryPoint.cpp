@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include "Scene.hpp"
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Software Renderer");
@@ -8,6 +10,10 @@ int main()
     triangle[0].position = sf::Vector2f(400, 100);
     triangle[1].position = sf::Vector2f(200, 500);
     triangle[2].position = sf::Vector2f(600, 500);
+
+    // Create the scene
+    Scene scene;
+    scene.loadScene("Models/Mew_Ip.raw");
 
     while (window.isOpen())
     {
