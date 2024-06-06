@@ -20,6 +20,7 @@ public:
     void computeNormal();
     Eigen::Vector3f getNormal() const;
     void setColor(const Eigen::Vector3f &color);
+    void translateVertsByMat4(Eigen::Matrix4f& mat);
 
     // let's make this a const static member so it is shared among all instances of the triangle class
     static const Eigen::Vector3f ERROR_COLOR;

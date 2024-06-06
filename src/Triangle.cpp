@@ -32,3 +32,6 @@ Eigen::Vector3f Triangle::getNormal() const
     return m_normal;
 }
 
+void Triangle::translateVertsByMat4(Eigen::Matrix4f& mat)
+{
+}

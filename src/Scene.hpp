@@ -23,7 +23,7 @@ private:
     float m_far;
     Eigen::Vector3f m_matColor;
     
-    std::vector<Triangle> triangles;
+    std::vector<Triangle> m_triangles;
 
 public:
     Scene();
@@ -32,5 +32,9 @@ public:
      * Given a filePath to a raw model format, load it into the scene as a std::vector of `Triangle`s
     */
     void loadScene(std::string& filePath);
+
+    void applyWorldTransform();
+    void applyViewTransform();
+    void applyPerspectiveTransform();
 
 };
