@@ -15,15 +15,33 @@ Scene::Scene() :
 {
 }
 
-void Scene::loadScene(std::string filePath) 
+void Scene::loadScene(std::string& filePath) 
 {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
+    std::filesystem::path executablePath = std::filesystem::current_path();
+    std::filesystem::path projectRootPath = executablePath.parent_path().parent_path();
+    std::filesystem::path fullPath = executablePath / filePath;
+    fullPath.make_preferred();
+
+
+
+    if (!std::filesystem::exists(fullPath))
+    {
+        std::cout << fullPath << std::endl;
+        std::cerr << "Unable to open the model. It seems the file doesn't exist.";
+        return;
+    }
+
+    std::ifstream file(fullPath);
+    if (!file.is_open()) 
+    {
+        std::cout << fullPath << std::endl;
         std::cerr << "Unable to open the model." << std::endl;
+        return;
     }
 
     std::string curLine;
-    while (std::getline(file, curLine)) {
+    while (std::getline(file, curLine)) 
+    {
         std::istringstream stringStream(curLine);
 
         // This is dirty but I should get to the actual assignment

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <filesystem>
 
 #include "Triangle.hpp"
 
@@ -30,6 +31,6 @@ public:
     /**
      * Given a filePath to a raw model format, load it into the scene as a std::vector of `Triangle`s
     */
-    void loadScene(std::string filePath);
+    void loadScene(std::string& filePath);
 
 };

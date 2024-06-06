@@ -13,7 +13,7 @@ int main()
 
     // Create the scene
     Scene scene;
-    scene.loadScene("Models/Mew_Ip.raw");
+    scene.loadScene(std::string("Models/Mew_lp.raw"));
 
     while (window.isOpen())
     {
