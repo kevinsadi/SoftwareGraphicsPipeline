@@ -26,6 +26,7 @@ private:
     float m_modelXRotation;
     float m_modelYRotation;
     float m_modelZRotation;
+    float m_scale;
     float m_fov;
     float m_near;
     float m_far;

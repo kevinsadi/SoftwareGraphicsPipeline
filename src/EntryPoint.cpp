@@ -11,7 +11,7 @@ int main()
     scene.calculateLighting();
     scene.applyViewTransform();
     scene.applyPerspectiveTransform(window.getSize().x, window.getSize().y);
-    scene.printTriangles();
+    //scene.printTriangles();
 
     while (window.isOpen())
     {

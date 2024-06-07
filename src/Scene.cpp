@@ -2,12 +2,13 @@
 
 Scene::Scene() :  
     m_lightPosition(1.0f, 0.0f, 0.0f),
-    m_cameraPosition(0.0f, 0.0f, -50.0f),
-    m_cameraDirection(-2.0f, 2.0f, -1.0f),
-    m_modelPosition(0.0f, 0.0f, 0.0f),
-    m_modelXRotation(0.0f),
-    m_modelYRotation(0.0f),
-    m_modelZRotation(0.0f),
+    m_cameraPosition(0.0f, 0.0f, -15.0f),
+    m_cameraDirection(0.0f, 0.0f, -1.0f),
+    m_modelPosition(5.0f, -5.0f, 0.0f),
+    m_modelXRotation(20.0f),
+    m_modelYRotation(180.0f),
+    m_modelZRotation(90.0f),
+    m_scale(1.0f),
     m_fov(45.0f),
     m_near(0.1f),
     m_far(100.0f),
@@ -88,8 +89,15 @@ void Scene::applyWorldTransform()
                     0, 0, 1, 0,
                     0, 0, 0, 1;
 
+    Eigen::Matrix4f scaleMat;
+    scaleMat <<   m_scale, 0, 0, 0,
+                    0, m_scale, 0, 0,
+                    0, 0, m_scale, 0,
+                    0, 0, 0, 1;
+
     for (Triangle& tri: m_triangles)
     {
+        tri.transformVertsByMat4(scaleMat);
         tri.transformVertsByMat4(rotateXMat);
         tri.transformVertsByMat4(rotateYMat);
         tri.transformVertsByMat4(rotateZMat);
