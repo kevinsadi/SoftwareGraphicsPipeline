@@ -6,11 +6,12 @@ int main()
 
     // Create the scene
     Scene scene;
-    scene.loadScene(std::string("Models/Mew_lp.raw"));
+    scene.loadScene(std::string("Models/chief_ag.raw"));
     scene.applyWorldTransform();
     scene.calculateLighting();
     scene.applyViewTransform();
     scene.applyPerspectiveTransform(window.getSize().x, window.getSize().y);
+    scene.sortTriangles();
     //scene.printTriangles();
 
     while (window.isOpen())

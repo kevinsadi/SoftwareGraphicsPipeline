@@ -54,5 +54,6 @@ public:
 
     void renderScene(sf::RenderWindow& window) const;
     void printTriangles() const;
+    void sortTriangles();
 
 };

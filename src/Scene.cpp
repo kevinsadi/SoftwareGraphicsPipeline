@@ -1,18 +1,18 @@
 #include "Scene.hpp"
 
 Scene::Scene() :  
-    m_lightPosition(1.0f, 0.0f, 0.0f),
-    m_cameraPosition(0.0f, 0.0f, -15.0f),
+    m_lightPosition(0.0f, 0.0f, 1.0f),
+    m_cameraPosition(0.0f, 0.0f, -150.0f),
     m_cameraDirection(0.0f, 0.0f, -1.0f),
-    m_modelPosition(9.0f, -5.0f, 0.0f),
-    m_modelXRotation(40.0f),
-    m_modelYRotation(190.0f),
-    m_modelZRotation(90.0f),
-    m_scale(1.0f),
+    m_modelPosition(9.0f, -40.0f, 0.0f),
+    m_modelXRotation(0.0f),
+    m_modelYRotation(70.0f),
+    m_modelZRotation(0.0f),
+    m_scale(0.7f),
     m_fov(45.0f),
     m_near(0.1f),
     m_far(200.0f),
-    m_matColor(1.0f, 1.0f, 1.0f)
+    m_matColor(0.0f, 1.0f, 0.0f)
 {
     m_modelXRotation = radians(m_modelXRotation);
     m_modelYRotation = radians(m_modelYRotation);
@@ -192,4 +192,17 @@ void Scene::printTriangles() const
         tri.printVerts();
         std::cout << std::endl;
     }
+}
+
+bool triangleComparator(const Triangle& t1, const Triangle& t2) 
+{
+    float averageT1Z = t1.getVertA().z() + t1.getVertB().z() + t1.getVertC().z(); 
+    float averageT2Z = t2.getVertA().z() + t2.getVertB().z() + t2.getVertC().z(); 
+
+    return averageT1Z < averageT2Z;
+}
+
+void Scene::sortTriangles()
+{
+    std::sort(m_triangles.begin(), m_triangles.end(), triangleComparator);
 }
