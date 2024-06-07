@@ -4,11 +4,6 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Software Renderer");
 
-    sf::VertexArray triangle(sf::Triangles, 3);
-    triangle[0].position = sf::Vector2f(400, 100);
-    triangle[1].position = sf::Vector2f(200, 500);
-    triangle[2].position = sf::Vector2f(600, 500);
-
     // Create the scene
     Scene scene;
     scene.loadScene(std::string("Models/Mew_lp.raw"));
@@ -16,6 +11,7 @@ int main()
     scene.calculateLighting();
     scene.applyViewTransform();
     scene.applyPerspectiveTransform(window.getSize().x, window.getSize().y);
+    scene.printTriangles();
 
     while (window.isOpen())
     {
@@ -28,8 +24,7 @@ int main()
             }
 
             window.clear();
-            window.draw(triangle);
-            // scene.renderScene();
+            scene.renderScene(window);
             window.display();
         }
     }

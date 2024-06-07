@@ -38,3 +38,32 @@ void Triangle::transformVertsByMat4(Eigen::Matrix4f& mat)
     m_b = m_b * mat;
     m_c = m_c * mat;
 }
+
+void Triangle::printVerts() const
+{
+    std::cout << "vert a: (" << m_a << ")," << std::endl; 
+    std::cout << "vert b: (" << m_b << ")" << std::endl;
+    std::cout << "vert c: (" << m_c << ") " << std::endl;
+}
+
+void Triangle::divideVertsByW() 
+{
+    m_a = m_a / m_a.w();
+    m_b = m_b / m_b.w();
+    m_c = m_c / m_c.w();
+}
+
+Eigen::RowVector4f Triangle::getVertA() const
+{
+    return m_a;
+}
+
+Eigen::RowVector4f Triangle::getVertB() const
+{
+    return m_b;
+}
+
+Eigen::RowVector4f Triangle::getVertC() const
+{
+    return m_c;
+}

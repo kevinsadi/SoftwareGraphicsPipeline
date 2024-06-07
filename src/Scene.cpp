@@ -2,8 +2,8 @@
 
 Scene::Scene() :  
     m_lightPosition(1.0f, 0.0f, 0.0f),
-    m_cameraPosition(0.0f, 0.0f, 1.0f),
-    m_cameraDirection(0.0f, 0.0f, -1.0f),
+    m_cameraPosition(0.0f, 0.0f, -50.0f),
+    m_cameraDirection(-2.0f, 2.0f, -1.0f),
     m_modelPosition(0.0f, 0.0f, 0.0f),
     m_modelXRotation(0.0f),
     m_modelYRotation(0.0f),
@@ -126,14 +126,15 @@ void Scene::applyPerspectiveTransform(float width, float height)
     float aspectRatio = width / height;
 
     Eigen::Matrix4f perspMat;
-    perspMat << (1 / aspectRatio) * (cotangent(1 / m_fov)), 0, 0, 0,
-                0, cotangent(1 / m_fov), 0, 0,
+    perspMat << (1 / aspectRatio) * (cotangent(m_fov / 2)), 0, 0, 0,
+                0, cotangent(m_fov / 2), 0, 0,
                 0, 0,  m_far / (m_far - m_near), 1,
                 0, 0, -(m_far * m_near) / (m_far - m_near), 0;
 
     for (Triangle& tri: m_triangles)
     {
         tri.transformVertsByMat4(perspMat);
+        tri.divideVertsByW();
     }
     std::cout << "Applied Perspective Transform" << std::endl;
     
@@ -146,21 +147,36 @@ void Scene::calculateLighting()
 
 void Scene::renderScene(sf::RenderWindow& window) const
 {
-    sf::VertexArray triangle(sf::Triangles, 3);
-    triangle[0].position = sf::Vector2f(400, 100);
-    triangle[1].position = sf::Vector2f(200, 500);
-    triangle[2].position = sf::Vector2f(600, 500);
 
-    window.draw(triangle);
+    for (const Triangle& tri: m_triangles)
+    {
+        sf::VertexArray triangle(sf::LineStrip, 4);
+        triangle[0].position = sf::Vector2f(tri.getVertA().x() * window.getSize().x, tri.getVertA().y() * window.getSize().y);
+        triangle[1].position = sf::Vector2f(tri.getVertB().x() * window.getSize().x, tri.getVertB().y() * window.getSize().y);
+        triangle[2].position = sf::Vector2f(tri.getVertC().x() * window.getSize().x, tri.getVertC().y() * window.getSize().y);
+        triangle[3].position = triangle[0].position; // Close the loop
+
+
+        window.draw(triangle);
+    }
 }
 
-float Scene::radians(float degrees)
+float Scene::radians(const float degrees) const
 {
     return degrees * (M_PI / 180); 
 }
 
 
-float Scene::cotangent(float radians) 
+float Scene::cotangent(const float radians) const
 {
     return 1.0 / std::tan(radians);
+}
+
+void Scene::printTriangles() const
+{
+    for (const Triangle& tri: m_triangles)
+    {
+        tri.printVerts();
+        std::cout << std::endl;
+    }
 }

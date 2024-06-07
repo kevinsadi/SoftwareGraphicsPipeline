@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <Eigen/Dense>
 
 class Triangle
@@ -21,6 +23,12 @@ public:
     Eigen::Vector3f getNormal() const;
     void setColor(const Eigen::Vector3f &color);
     void transformVertsByMat4(Eigen::Matrix4f& mat);
+    void printVerts() const;
+    void divideVertsByW();
+    Eigen::RowVector4f getVertA() const;
+    Eigen::RowVector4f getVertB() const;
+    Eigen::RowVector4f getVertC() const;
+
 
     // let's make this a const static member so it is shared among all instances of the triangle class
     static const Eigen::Vector3f ERROR_COLOR;

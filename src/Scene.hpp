@@ -33,9 +33,9 @@ private:
     std::vector<Triangle> m_triangles;
 
     // return angle in radians
-    float radians(float degrees);
+    float radians(const float degrees) const;
     // take cotangent of angle (expected in radians)
-    float cotangent(float radians);
+    float cotangent(const float radians) const;
 
 public:
     Scene();
@@ -52,5 +52,6 @@ public:
     void calculateLighting();
 
     void renderScene(sf::RenderWindow& window) const;
+    void printTriangles() const;
 
 };
