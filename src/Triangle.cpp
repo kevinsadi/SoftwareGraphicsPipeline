@@ -67,3 +67,17 @@ Eigen::RowVector4f Triangle::getVertC() const
 {
     return m_c;
 }
+
+void Triangle::calculateLighting(const Eigen::Vector3f& lightPos, const Eigen::Vector3f& matColor)
+{
+    Eigen::Vector3f triCentroid = (m_a.head<3>() + m_b.head<3>() + m_c.head<3>()) / 3.0f;
+    Eigen::Vector3f lightDir = (lightPos - triCentroid).normalized();
+    float intensity = std::max(0.0f, (lightDir.dot(m_normal)));
+    Eigen::Vector3f triColor = matColor * intensity * 255;
+    this->setColor(triColor);
+}
+
+Eigen::Vector3f Triangle::getTriColor() const
+{
+    return m_color;
+}

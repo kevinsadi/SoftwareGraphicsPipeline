@@ -4,15 +4,15 @@ Scene::Scene() :
     m_lightPosition(1.0f, 0.0f, 0.0f),
     m_cameraPosition(0.0f, 0.0f, -15.0f),
     m_cameraDirection(0.0f, 0.0f, -1.0f),
-    m_modelPosition(5.0f, -5.0f, 0.0f),
-    m_modelXRotation(20.0f),
-    m_modelYRotation(180.0f),
+    m_modelPosition(9.0f, -5.0f, 0.0f),
+    m_modelXRotation(40.0f),
+    m_modelYRotation(190.0f),
     m_modelZRotation(90.0f),
     m_scale(1.0f),
     m_fov(45.0f),
     m_near(0.1f),
-    m_far(100.0f),
-    m_matColor(1.0f, 0.0f, 0.0f)
+    m_far(200.0f),
+    m_matColor(1.0f, 1.0f, 1.0f)
 {
     m_modelXRotation = radians(m_modelXRotation);
     m_modelYRotation = radians(m_modelYRotation);
@@ -150,7 +150,10 @@ void Scene::applyPerspectiveTransform(float width, float height)
 
 void Scene::calculateLighting()
 {
-    std::cout << "KEVIN COME BACK AND DO LIGHTING" << std::endl;
+    for (Triangle& tri: m_triangles)
+    {
+        tri.calculateLighting(m_lightPosition, m_matColor);
+    }
 }
 
 void Scene::renderScene(sf::RenderWindow& window) const
@@ -158,12 +161,14 @@ void Scene::renderScene(sf::RenderWindow& window) const
 
     for (const Triangle& tri: m_triangles)
     {
-        sf::VertexArray triangle(sf::LineStrip, 4);
+        sf::VertexArray triangle(sf::Triangles, 3);
         triangle[0].position = sf::Vector2f(tri.getVertA().x() * window.getSize().x, tri.getVertA().y() * window.getSize().y);
         triangle[1].position = sf::Vector2f(tri.getVertB().x() * window.getSize().x, tri.getVertB().y() * window.getSize().y);
         triangle[2].position = sf::Vector2f(tri.getVertC().x() * window.getSize().x, tri.getVertC().y() * window.getSize().y);
-        triangle[3].position = triangle[0].position; // Close the loop
 
+        triangle[0].color = sf::Color(tri.getTriColor().x(), tri.getTriColor().y(), tri.getTriColor().z());
+        triangle[1].color = sf::Color(tri.getTriColor().x(), tri.getTriColor().y(), tri.getTriColor().z());
+        triangle[2].color = sf::Color(tri.getTriColor().x(), tri.getTriColor().y(), tri.getTriColor().z());
 
         window.draw(triangle);
     }

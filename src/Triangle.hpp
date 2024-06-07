@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
 #include <Eigen/Dense>
 
@@ -28,6 +29,8 @@ public:
     Eigen::RowVector4f getVertA() const;
     Eigen::RowVector4f getVertB() const;
     Eigen::RowVector4f getVertC() const;
+    Eigen::Vector3f getTriColor() const;
+    void calculateLighting(const Eigen::Vector3f& lightPos, const Eigen::Vector3f& matColor);
 
 
     // let's make this a const static member so it is shared among all instances of the triangle class
